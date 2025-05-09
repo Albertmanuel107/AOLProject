@@ -7,20 +7,17 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.OutputStream;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Scanner;
-import java.lang.*;
+
 public class Gym_Management_System {
-    public static void main(String[] args) throws IOException {
-        Scanner sc = new Scanner(System.in);
-        String[][] Members = new String[200][12];
-        String[][] trainer = new String[20][4];
-        String[][] Machines = new String[15][12];
-        String [] AdminInfo = new String[2];
-        // Code For Interface...
-        System.out.println("____________________________________________________________________________");
+	
+	public static void printWelcomeInterface() {
+		
+		printSymbol("_", 76);
         System.out.println("                            WELCOME TO SYSTEM");
-        System.out.println("____________________________________________________________________________");
-        System.out.println("****************************************************************************");
+        printSymbol("_", 76);
+        printSymbol("*", 76);
         System.out.println("*********************  _______  *  _____  *****                           **");
         System.out.println("********************* |  _____| * |  ___| *****       **           **     **");
         System.out.println("********************* | |___    * | |     *****      ***___________***    **");
@@ -29,39 +26,38 @@ public class Gym_Management_System {
         System.out.println("********************* |_|       * |_____| *****       **    GYM    **     **");
         System.out.println("*********************           *         *****                           **");
         System.out.println("************************  FITNESS CLUB  ************************************");
-        System.out.println("****************************************************************************");
+        printSymbol("*", 76);
         System.out.println("*    *     *   WHEN LIFE GIVES YOU PAIN.....GO TO THE GYM   *    *    *    *");
-        System.out.println("____________________________________________________________________________\n");
+        printSymbol("_", 76);
+	}
+	
+	public static void printSymbol(String symbol, int counter) {
+		
+		for (int i = 0 ; i < counter ; i++) {
+			
+			System.out.println(symbol);
+		}
+	}
+	
+	public static ArrayList<Members> ImportMemberDataFromFile() throws IOException {
+		
+		ArrayList<Members> membersList = Members.getMembersData();
+		return membersList;
+	}
+	
+    public static void main(String[] args) throws IOException {
+        Scanner sc = new Scanner(System.in);
+        String[][] Members = new String[200][12];
+        String[][] trainer = new String[20][4];
+        String[][] Machines = new String[15][12];
+        String [] AdminInfo = new String[2];
+        // Code For Interface...
+        printWelcomeInterface();
         // Importing our Files of Members ,Trainers, Machines, Admin Info and File Exception Handling...
         boolean loaded = true;
         while(loaded) {
             //..........................Storing data from Members' file to Members' 2d Array...........................
-            try {
-                File a1 = new File("Members.txt");
-                Scanner input = new Scanner(a1);
-                for (int i = 0; i < Members.length; i++) {
-                    String ab = input.nextLine();
-                    String[] data = ab.split("#");
-                    for (int j = 0; j < Members[0].length; j++) {
-                        Members[i][j] = data[j];
-                    }
-                }
-            } catch (FileNotFoundException e) {
-                System.out.println("\n\t\tNo Previous File Exists.So a New 'Members' File is Created\n");
-                OutputStream os = new FileOutputStream("Members.txt");
-                PrintWriter put = new PrintWriter(os);
-                for (int i = 0 ; i < 200 ; i++){
-                    for (int j = 0; j < 12; j++){
-                        put.print("null#");
-                    }
-                    put.println();
-                }
-                put.close();
-                continue;
-            } catch (IndexOutOfBoundsException e) {
-                System.out.println("\n\t\tIndex out of bound exception...Sorry we are Closing Program\n");
-                System.exit(1);
-            }
+            ArrayList<Members> membersList = ImportMemberDataFromFile();
             //............................Storing data from Trainers' file to trainers' 2d Array.......................
             try {
                 File a2 = new File("trainers.txt");
